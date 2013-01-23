@@ -5,9 +5,10 @@
     /*
         Sets the mode in which speech recognizer begins at startup
 
-        true - turned on
-        false - turned off
-        "sleep" - turned on but sleeping
+        true - Turned on and ready to run
+        false - Turned off. You must manually turn it back on after this.
+        "sleep" - Sleeping. In sleep mode the recognizer still runs but doesn't
+                  respond to any other commands than "wake up" or "turn off".
     */
     "startup": true
 }

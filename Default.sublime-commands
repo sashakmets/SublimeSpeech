@@ -1,0 +1,22 @@
+[
+    {
+        "caption": "Speech: Turn On",
+        "command": "set_speech_recognition_mode",
+        "args": {"enable": true}
+    },
+    {
+        "caption": "Speech: Turn Off",
+        "command": "set_speech_recognition_mode",
+        "args": {"enable": false}
+    },
+    {
+        "caption": "Speech: Sleep",
+        "command": "set_speech_recognition_mode",
+        "args": {"sleep": true}
+    },
+    {
+        "caption": "Speech: Wake Up",
+        "command": "set_speech_recognition_mode",
+        "args": {"sleep": false}
+    }
+]

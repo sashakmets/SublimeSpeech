@@ -1,0 +1,3 @@
+[
+    { "keys": ["ctrl+shift+o"], "command": "set_speech_recognition_mode", "args": {"toggle": true} }
+]

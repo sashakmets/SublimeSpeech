@@ -1,0 +1,13 @@
+/*
+    Speech default settings
+*/
+{
+    /*
+        Sets the mode in which speech recognizer begins at startup
+
+        true - turned on
+        false - turned off
+        "sleep" - turned on but sleeping
+    */
+    "startup": true
+}

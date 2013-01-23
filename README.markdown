@@ -1,9 +1,9 @@
 SublimeSpeech
 =============
 
-Speech recognition plugin for Sublime Text 2
-NOTE: Windows only since it uses Windows SAPI!
-Understands only english.
+Speech recognition plugin for Sublime Text 2  
+NOTE: Windows only since it uses Windows SAPI!  
+Understands only english.  
 
 Requirements
 ------------
@@ -47,4 +47,6 @@ Here are some example commands you can give:
 Not all functionality is available by speaking since there are so many commands in Sublime Text 2. However speech commands are great! Don't remember the shortcut for the action you want to do? Just speak it! Chances are you'll remember the speech command since they are intuitive and resemble their corresponding actions.
 
 Remember that you can train the recognizer to understand you better. This done in the control panel for speech recognition in Windows.
+
+Note that status bar shows some info about speech recognition. For example it say "What was that?" if it can't understand you.
 

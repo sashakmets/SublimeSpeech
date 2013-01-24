@@ -11,6 +11,10 @@ You need to have the english language pack for Windows installed and enabled. If
 
 The language pack can be downloaded from Windows Update if you need it.
 
+Installation
+------------
+Install via Package Control. Or download from here, rename to "Speech" and put it in your "Packages" directory.
+
 Modes
 -----
 The recognizer can be in three modes:
@@ -25,7 +29,8 @@ Key bindings
 
 Speech Commands
 ---------------
-There's no full reference available yet but you can look all the commands from _speech.py_ file. Syntax there is quite intuitive but you can also look the full syntax from [dragonfly](https://code.google.com/p/dragonfly/), the framework this plugin is built on.
+Full reference sheet is in file _reference.txt_  
+You can say "What can i say" to open up this reference.
 
 Here are some example commands you can give:
 
@@ -44,7 +49,7 @@ Here are some example commands you can give:
   Example: _set syntax python_  
   Result: sets syntax to python for the current file
 
-Not all functionality is available by speaking since there are so many commands in Sublime Text 2. However speech commands are great! Don't remember the shortcut for the action you want to do? Just speak it! Chances are you'll remember the speech command since they are intuitive and resemble their corresponding actions.
+Not all functionality is available by speaking but simple application control and basic text editing is implemented.
 
 Remember that you can train the recognizer to understand you better. This done in the control panel for speech recognition in Windows.
 

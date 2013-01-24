@@ -17,25 +17,27 @@ from dragonfly import *
 # -----------------------------------------------------------------------------
 class SublimeCommand(ActionBase):
 
-    def __init__(self, command, repeatable=False, **args):
+    def __init__(self, command, repeat=1, **args):
         super(SublimeCommand, self).__init__()
         self.command = command
-        self.repeatable = repeatable
+        self.repeat = repeat
         self.args = dict(args)
 
     def _execute(self, data=None):
-        repeat = 1
+        repeat = self.repeat
+        if isinstance(self.repeat, str):
+            repeat = data[self.repeat]
+
         args = self.args
         if data:
-            if self.repeatable:
-                repeat = data.pop("n", 1)
-            for k, v in self.args.items():
+            for k, v in args.items():
                 try:
                     args[k] = v % data
                 except:
                     pass
-        for _ in range(repeat):
-            self.run_command(self.args)
+            args.update(data)
+        for i in range(repeat):
+            self.run_command(args)
 
 
 class SublimeApplicationCommand(SublimeCommand):
@@ -54,6 +56,18 @@ class SublimeTextCommand(SublimeCommand):
 
     def run_command(self, data):
         sublime.active_window().active_view().run_command(self.command, data)
+
+
+class SublimeSelectViewCommand(ActionBase):
+
+    def _execute(self, data=None):
+        index = data["index"]
+        if index < 1:
+            index = 1
+        elif index > len(sublime.active_window().views()):
+            index = len(sublime.active_window().views())
+        data["index"] = index - 1
+        sublime.active_window().run_command("select_by_index", data)
 
 
 # -----------------------------------------------------------------------------
@@ -103,8 +117,11 @@ class NonRepeatableRule(MappingRule):
         "sleep":                                Function(sleep_recognizer),
         "turn off":                             Function(turn_off_recognizer),
 
+        "what can i say":                       SublimeWindowCommand("open_file", file="${packages}/Speech/reference.txt"),
+
         "new file":                             SublimeWindowCommand("new_file"),
-        "close file":                           SublimeWindowCommand("close"),
+        "close (file | view)":                  SublimeWindowCommand("close"),
+        "open file":                            SublimeWindowCommand("prompt_open_file"),
         "new window":                           SublimeWindowCommand("new_window"),
         "close window":                         SublimeWindowCommand("close_window"),
 
@@ -117,8 +134,6 @@ class NonRepeatableRule(MappingRule):
 
         "switch project":                       SublimeWindowCommand("prompt_select_project"),
         "find <text>":                          SublimeWindowCommand("show_panel", panel="find") + Text("%(text)s"),
-        "next":                                 SublimeWindowCommand("find_next"),
-        "previous":                             SublimeWindowCommand("find_prev"),
         "all":                                  SublimeWindowCommand("find_all_under"),
 
         "upper case":                           SublimeTextCommand("upper_case"),
@@ -126,8 +141,8 @@ class NonRepeatableRule(MappingRule):
 
         "console":                              SublimeWindowCommand("show_panel", panel="console", toggle=True),
         "[command] palette":                    SublimeWindowCommand("show_overlay", overlay="command_palette"),
-        "goto panel":                           SublimeWindowCommand("show_overlay", overlay="goto", show_files=True),
-        "goto symbols":                         SublimeWindowCommand("show_overlay", overlay="goto", text="@"),
+        "panel":                                SublimeWindowCommand("show_overlay", overlay="goto", show_files=True),
+        "go to <text>":                         SublimeWindowCommand("show_overlay", overlay="goto", text="@%(text)s") + SublimeWindowCommand("hide_overlay"),
         "minimap":                              SublimeWindowCommand("toggle_minimap"),
         "side bar":                             SublimeWindowCommand("toggle_side_bar"),
         "fullscreen":                           SublimeWindowCommand("toggle_full_screen"),
@@ -136,6 +151,9 @@ class NonRepeatableRule(MappingRule):
         "spell check":                          SublimeWindowCommand("toggle_setting", setting="spell_check"),
         "next misspelling":                     SublimeWindowCommand("next_misspelling"),
         "previous misspelling":                 SublimeWindowCommand("prev_misspelling"),
+
+        "fold":                                 SublimeTextCommand("fold"),
+        "unfold":                               SublimeTextCommand("unfold"),
 
         "word wrap":                            SublimeWindowCommand("toggle_setting", setting="word_wrap"),
         "sort lines":                           SublimeTextCommand("sort_lines", case_sensitive=False),
@@ -151,12 +169,14 @@ class NonRepeatableRule(MappingRule):
         "snippet <phrase>":                     SublimeWindowCommand("show_overlay", overlay="command_palette", text="Snippet: %(phrase)s") + Key("enter"),
 
         "reset font [size]":                    SublimeApplicationCommand("reset_font_size"),
-        "[go to] line <n>":                     SublimeTextCommand("goto_line", line="%(n)d"),
+        "[go to] line <line>":                  SublimeTextCommand("goto_line"),
         "comment":                              SublimeTextCommand("toggle_comment"),
         "select all":                           SublimeTextCommand("select_all"),
-        "indent":                               SublimeTextCommand("reindent"),
+        "reindent":                             SublimeTextCommand("reindent"),
         "(convert | translate) [to] tabs":      SublimeTextCommand("unexpand_tabs", set_translate_tabs=True),
         "(convert | translate) [to] spaces":    SublimeTextCommand("expand_tabs", set_translate_tabs=True),
+
+        "center":                               SublimeTextCommand("show_at_center"),
 
         "save":                                 SublimeTextCommand("save"),
         "save as":                              SublimeTextCommand("prompt_save_as"),
@@ -168,6 +188,7 @@ class NonRepeatableRule(MappingRule):
         Dictation("text"),
         Dictation("phrase"),
         Integer("n", 1, 9999999999),
+        Integer("line", 1, 9999999999),
     ]
 
 
@@ -176,35 +197,30 @@ class KeystrokeRule(MappingRule):
     exported = False
 
     mapping  = {
-        "up [<n>]":                                 SublimeTextCommand("move", repeatable=True, by="lines", forward=False),
-        "down [<n>]":                               SublimeTextCommand("move", repeatable=True, by="lines", forward=True),
-        "left [<n>]":                               SublimeTextCommand("move", repeatable=True, by="characters", forward=False),
-        "right [<n>]":                              SublimeTextCommand("move", repeatable=True, by="characters", forward=True),
-        "page up [<n>]":                            SublimeTextCommand("move", repeatable=True, by="pages", forward=False),
-        "page down [<n>]":                          SublimeTextCommand("move", repeatable=True, by="pages", forward=True),
-        "up <n> (page | pages)":                    SublimeTextCommand("move", repeatable=True, by="pages", forward=False),
-        "down <n> (page | pages)":                  SublimeTextCommand("move", repeatable=True, by="pages", forward=True),
-        "left <n> (word | words)":                  SublimeTextCommand("move", repeatable=True, by="words", forward=False),
-        "right <n> (word | words)":                 SublimeTextCommand("move", repeatable=True, by="word_ends", forward=True),
+        "(say | dictate | echo) <text>":            SublimeTextCommand("insert", characters="%(text)s"),
+
+        "up [<n>]":                                 SublimeTextCommand("move", repeat="n", by="lines", forward=False),
+        "down [<n>]":                               SublimeTextCommand("move", repeat="n", by="lines", forward=True),
+        "left [<n>]":                               SublimeTextCommand("move", repeat="n", by="characters", forward=False),
+        "right [<n>]":                              SublimeTextCommand("move", repeat="n", by="characters", forward=True),
+        "scroll down [<n>]":                        SublimeTextCommand("scroll_lines", repeat="n", amount=-1),
+        "scroll up [<amount>]":                     SublimeTextCommand("scroll_lines"),
+        "page up [<n>]":                            SublimeTextCommand("move", repeat="n", by="pages", forward=False),
+        "page down [<n>]":                          SublimeTextCommand("move", repeat="n", by="pages", forward=True),
+        "up <n> (page | pages)":                    SublimeTextCommand("move", repeat="n", by="pages", forward=False),
+        "down <n> (page | pages)":                  SublimeTextCommand("move", repeat="n", by="pages", forward=True),
+        "left <n> (word | words)":                  SublimeTextCommand("move", repeat="n", by="words", forward=False),
+        "right <n> (word | words)":                 SublimeTextCommand("move", repeat="n", by="word_ends", forward=True),
         "home":                                     SublimeTextCommand("move_to", to="bol", extend=False),
         "end":                                      SublimeTextCommand("move_to", to="eol", extend=False),
         "doc home":                                 SublimeTextCommand("move_to", to="bof", extend=False),
         "doc end":                                  SublimeTextCommand("move_to", to="eof", extend=False),
 
-        "select <n> lines down":                    SublimeTextCommand("select_lines", repeatable=True, forward=True),
-        "select <n> lines up":                      SublimeTextCommand("select_lines", repeatable=True, forward=False),
-        "scroll down [<n>]":                        SublimeTextCommand("scroll_lines", repeatable=True, amount=-1),
-        "scroll up [<n>]":                          SublimeTextCommand("scroll_lines", repeatable=True, amount=1),
+        "select [<n>] (line | lines) down":         SublimeTextCommand("select_lines", repeat="n", forward=True),
+        "select [<n>] (line | lines) up":           SublimeTextCommand("select_lines", repeat="n", forward=False),
 
-        "find next [<n>]":                          SublimeWindowCommand("find_under_expand", repeatable=True),
-
-        "space [<n>]":                              release + Key("space:%(n)d"),
-        "enter [<n>]":                              release + Key("enter:%(n)d"),
-        "tab [<n>]":                                Key("tab:%(n)d"),
         "delete [<n>]":                             release + Key("del:%(n)d"),
         "delete [<n> | this] (line|lines)":         release + Key("home, s-down:%(n)d, del"),
-        "backspace [<n>]":                          release + Key("backspace:%(n)d"),
-        "escape":                                   release + Key("escape"),
 
         "paste":                                    release + Key("c-v"),
         "duplicate <n>":                            release + Key("c-c, c-v:%(n)d"),
@@ -216,19 +232,17 @@ class KeystrokeRule(MappingRule):
         "release control":                          Key("ctrl:up"),
         "release [all]":                            release,
 
-        "(say | dictate | echo) <text>":            SublimeTextCommand("insert", characters="%(text)s"),
-
-        "(decrease | smaller) font [size]":         SublimeApplicationCommand("decrease_font_size"),
-        "(increase | bigger | larger) font [size]": SublimeApplicationCommand("increase_font_size"),
-
         "undo":                                     SublimeTextCommand("undo"),
         "redo":                                     SublimeTextCommand("redo"),
 
-        "next view":                                SublimeWindowCommand("next_view"),
-        "previous view":                            SublimeWindowCommand("prev_view"),
-
         "next field":                               SublimeTextCommand("next_field"),
         "previous field":                           SublimeTextCommand("previous_field"),
+
+        "space [<n>]":                              release + Key("space:%(n)d"),
+        "enter [<n>]":                              release + Key("enter:%(n)d"),
+        "tab [<n>]":                                Key("tab:%(n)d"),
+        "backspace [<n>]":                          release + Key("backspace:%(n)d"),
+        "escape":                                   release + Key("escape"),
 
         "new line":                                 SublimeTextCommand("insert", characters="\n"),
         "exclamation mark":                         SublimeTextCommand("insert", characters="!"),
@@ -250,15 +264,28 @@ class KeystrokeRule(MappingRule):
         "colon":                                    SublimeTextCommand("insert", characters=":"),
         "semicolon":                                SublimeTextCommand("insert", characters=";"),
         "asterisk":                                 SublimeTextCommand("insert", characters="*"),
+
+        "(decrease | smaller) font [size]":         SublimeApplicationCommand("decrease_font_size"),
+        "(increase | bigger | larger) font [size]": SublimeApplicationCommand("increase_font_size"),
+
+        "next [<n>]":                               SublimeWindowCommand("find_next"),
+        "previous [<n>]":                           SublimeWindowCommand("find_prev"),
+
+        "next view":                                SublimeWindowCommand("next_view"),
+        "previous view":                            SublimeWindowCommand("prev_view"),
+        "view <index>":                             SublimeSelectViewCommand(),
     }
 
     extras   = [
                 IntegerRef("n", 1, 1000),
+                Integer("index", 0, 1000),
+                Integer("amount", 1, 1000000),
                 Dictation("text"),
                ]
 
     defaults = {
                 "n": 1,
+                "amount": 1,
                }
 
 

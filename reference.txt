@@ -1,0 +1,172 @@
+===============================================================================
+                        Voice command reference sheet
+===============================================================================
+
+
+Note that you can repeat some commands or chains of commands by saying
+<your_commands> [[[and] repeat [that]] <n> times]
+
+For example:
+ * new line 10 times
+ * up 5 right 5 repeat 10 times
+ * smaller font 2 times
+
+
+
+===============================================================================
+                COMMAND                                EXPLANATION
+===============================================================================
+
+-------------------------------------------------------------------------------
+General
+-------------------------------------------------------------------------------
+"sleep":                                        put to sleep mode
+"wake up":                                      wakes up sleeping recognizer
+"turn off":                                     shutdown recognizer
+
+"what can i say":                               opens this reference sheet
+
+"new file":                                     creates a new unnamed file
+"close (file | view)":                          closes current file
+"open file":                                    prompts open file dialog
+"new window":                                   opens a new window
+"close window":                                 closes current window
+
+"default settings":                             opens default settings
+"user settings":                                opens user settings
+"syntax settings":                              opens syntax speficix settings
+"distraction free settings":                    opens distraction free settings
+"default keys":                                 opens default key settings
+"user keys":                                    open user key settings
+
+"switch project":                               prompts select project window
+"find <text>":                                  searches for <text>
+"all":                                          selects all search results
+
+"upper case":                                   make current selection upper case
+"lower case":                                   make current selection lower case
+
+"console":                                      toggles python console
+"[command] palette":                            toggles command palette
+"panel":                                        toggles Goto Anything
+"go to <text>":                                 jumps to <text> (goto symbol)
+"minimap":                                      toggles minimap
+"side bar":                                     toggles sidebar
+"fullscreen":                                   toggles fullscreen
+"distraction free":                             toggles distraction free mode
+
+"spell check":                                  toggles spell check
+"next misspelling":                             moves to next misspelling
+"previous misspelling":                         moves to previous misspelling
+
+"fold":                                         
+"unfold":                                       
+
+"word wrap":                                    toggles word wrap
+"sort lines":                                   sorts lines in the current selection
+
+"build":                                        run build
+"build [and] run":                              build and run
+"kill":                                         kills running process
+
+"set syntax":                                   show available syntax settings
+"set syntax <language>":                        sets syntax to <language>
+
+"snippet":                                      show available snippets
+"snippet <name>":                               inserts snippet <name>
+
+"reset font [size]":                            resets font size
+"[go to] line <line>":                          goes to line <line>
+"comment":                                      comments in/out current selection
+"select all":                                   selects whole document
+"reindent":                                     reindent selection
+"(convert | translate) [to] tabs":              converts indentation to tabs
+"(convert | translate) [to] spaces":            converts indentation to spaces
+
+"center":                                       centers to cursor
+
+"save":                                         save current file,
+"save as":                                      prompts save dialog
+
+-------------------------------------------------------------------------------
+Text editing
+-------------------------------------------------------------------------------
+"(say | dictate | echo) <text>":                prints <text> to current file
+
+"up [<n>]":                                     
+"down [<n>]":                                   
+"left [<n>]":                                   
+"right [<n>]":
+"scroll down [<n>]":                            scrolls lines down
+"scroll up [<n>]":                              scrolls lines up                                  
+"page up [<n>]":                                
+"page down [<n>]":                              
+"up <n> (page | pages)":                        
+"down <n> (page | pages)":                      
+"left <n> (word | words)":                      
+"right <n> (word | words)":                     
+"home":                                         
+"end":                                          
+"doc home":                                     
+"doc end":                                      
+
+"select [<n>] (line | lines) down":             adds lines to selection
+"select [<n>] (line | lines) up":               adds lines to selection
+
+"delete [<n>]":                                 
+"delete [<n> | this] (line|lines)":  
+
+"paste":                                        
+"duplicate <n>":                                
+"copy":                                         
+"cut":                                          
+"[hold] shift":                                 
+"release shift":                                
+"[hold] control":                               
+"release control":                              
+"release [all]":                                
+
+"undo":                                         
+"redo":                                         
+
+"next field":                                   moves to next field at snippet
+"previous field":                               moves to previous field at snippet
+
+"space [<n>]":                                  
+"enter [<n>]":                                  
+"tab [<n>]":                                               
+"backspace [<n>]":                              
+"escape":                                       
+"new line":                                     
+"exclamation mark":                             
+"question mark":                                
+"left parenthesis":                             
+"right parenthesis":                            
+"parentheses":                                  
+"left square bracket":                          
+"right square bracket":                         
+"square brackets":                              
+"left (brace | curly bracket)":                 
+"right (brace | curly bracket)":                
+"(braces | curly brackets)":                    
+"forward slash":                                
+"backward slash":                               
+"dot | period":                                 
+"comma":                                        
+"ampersand":                                    
+"colon":                                        
+"semicolon":                                    
+"asterisk":
+
+-------------------------------------------------------------------------------
+Miscellaneous
+-------------------------------------------------------------------------------
+"(decrease | smaller) font [size]":             
+"(increase | bigger | larger) font [size]":    
+
+"next [<n>]":                                   moves to next search result
+"previous [<n>]":                               moves to previous search result
+
+"next view":                                    move to next view in current window
+"previous view":                                move to previous view in current window
+"view <index>":                                 move to view at <index>                                

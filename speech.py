@@ -157,6 +157,8 @@ class NonRepeatableRule(MappingRule):
 
         "word wrap":                            SublimeWindowCommand("toggle_setting", setting="word_wrap"),
         "sort lines":                           SublimeTextCommand("sort_lines", case_sensitive=False),
+        "swap up":                              SublimeTextCommand("swap_line_up"),
+        "swap down":                            SublimeTextCommand("swap_line_down"),
 
         "build":                                SublimeWindowCommand("build"),
         "build [and] run":                      SublimeWindowCommand("build", variant="Run"),
@@ -219,13 +221,12 @@ class KeystrokeRule(MappingRule):
         "select [<n>] (line | lines) down":         SublimeTextCommand("select_lines", repeat="n", forward=True),
         "select [<n>] (line | lines) up":           SublimeTextCommand("select_lines", repeat="n", forward=False),
 
-        "delete [<n>]":                             release + Key("del:%(n)d"),
-        "delete [<n> | this] (line|lines)":         release + Key("home, s-down:%(n)d, del"),
+        "delete [<n>]":                             SublimeTextCommand("right_delete", repeat="n"),
+        "delete [<n> | this] (line|lines)":         SublimeTextCommand("run_macro_file", repeat="n", file="Packages/Default/Delete to Hard EOL.sublime-macro"),
 
-        "paste":                                    release + Key("c-v"),
-        "duplicate <n>":                            release + Key("c-c, c-v:%(n)d"),
-        "copy":                                     release + Key("c-c"),
-        "cut":                                      release + Key("c-x"),
+        "paste":                                    SublimeTextCommand("paste"),
+        "copy":                                     SublimeTextCommand("copy"),
+        "cut":                                      SublimeTextCommand("cut"),
         "[hold] shift":                             Key("shift:down"),
         "release shift":                            Key("shift:up"),
         "[hold] control":                           Key("ctrl:down"),
@@ -264,6 +265,8 @@ class KeystrokeRule(MappingRule):
         "colon":                                    SublimeTextCommand("insert", characters=":"),
         "semicolon":                                SublimeTextCommand("insert", characters=";"),
         "asterisk":                                 SublimeTextCommand("insert", characters="*"),
+        "equals":                                   SublimeTextCommand("insert", characters="="),
+        "double equals":                            SublimeTextCommand("insert", characters="=="),
 
         "(decrease | smaller) font [size]":         SublimeApplicationCommand("decrease_font_size"),
         "(increase | bigger | larger) font [size]": SublimeApplicationCommand("increase_font_size"),

@@ -1,15 +1,8 @@
 SublimeSpeech
 =============
 
-Speech recognition plugin for Sublime Text 2  
-NOTE: Windows only since it uses Windows SAPI!  
-Understands only english.  
-
-Requirements
-------------
-You need to have the english language pack for Windows installed and enabled. If the UI you are seeing is in english, everything's set and you don't have to do anything.
-
-The language pack can be downloaded from Windows Update if you need it.
+English speech recognition plugin for Sublime Text 2.  
+For Windows only.
 
 Installation
 ------------

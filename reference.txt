@@ -64,6 +64,8 @@ General
 
 "word wrap":                                    toggles word wrap
 "sort lines":                                   sorts lines in the current selection
+"swap up":                                      swaps current selection with the line above it
+"swap down":                                    swaps current selection with the line below it
 
 "build":                                        run build
 "build [and] run":                              build and run

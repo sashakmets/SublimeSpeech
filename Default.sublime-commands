@@ -18,5 +18,10 @@
         "caption": "Speech: Wake Up",
         "command": "set_speech_recognition_mode",
         "args": {"sleep": false}
+    },
+    {
+        "caption": "Speech: Show Reference",
+        "command": "open_file",
+        "args": {"file": "${packages}/Speech/reference.txt"}
     }
 ]

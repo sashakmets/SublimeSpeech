@@ -3,7 +3,7 @@ import sublime_plugin
 import functools
 import os
 import sys
-pywin_dir = "pywin 64bit" if sys.maxsize > 2**32 else "pywin 32bit"
+pywin_dir = "pywin64bit" if sys.maxsize > 2**32 else "pywin32bit"
 sys.path.append(os.getcwd() + "/lib")
 sys.path.append(os.getcwd() + "/lib/%s" % pywin_dir)
 sys.path.append(os.getcwd() + "/lib/%s/win32" % pywin_dir)
@@ -267,6 +267,8 @@ class KeystrokeRule(MappingRule):
         "asterisk":                                 SublimeTextCommand("insert", characters="*"),
         "equals":                                   SublimeTextCommand("insert", characters="="),
         "double equals":                            SublimeTextCommand("insert", characters="=="),
+        "less than":                                SublimeTextCommand("insert", characters="<"),
+        "greater than":                             SublimeTextCommand("insert", characters=">"),
 
         "(decrease | smaller) font [size]":         SublimeApplicationCommand("decrease_font_size"),
         "(increase | bigger | larger) font [size]": SublimeApplicationCommand("increase_font_size"),
